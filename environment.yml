@@ -1,0 +1,12 @@
+name: hpe_hmm
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - numpy
+      - scipy
+      - matplotlib
+      - pandas
+      - tqdm
