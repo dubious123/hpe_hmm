@@ -46,3 +46,32 @@ ipch/
 Thumbs.db
 
 *.egg-info/
+
+# 데이터 & 결과
+data/
+datasets/
+results/
+outputs/
+*.npz
+*.pkl
+*.zip
+*.tar.gz
+
+# 캐시
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# VS / Anaconda
+.vs/
+.vscode/
+*.suo
+*.user
+*.db
+.env/
+.venv/
+.conda/
+
+# 로그
+*.log
