@@ -21,6 +21,8 @@ sys.path.append(freihand_root)
 from utils.eval_util import EvalUtil
 from eval import align_w_scale, curve, createHTML
 
+from tqdm.auto import tqdm
+
 _AUC_VAL_MIN = 0.0
 _AUC_VAL_MAX = 50.0
 _AUC_STEPS = 100
@@ -164,7 +166,13 @@ class HPEEvaluator:
         eval_util_rr = EvalUtil()
         eval_util_pa = EvalUtil()
 
-        for i, kpt_gt in joint_3d_gt.items():
+        for i, kpt_gt in tqdm(
+            joint_3d_gt.items(),
+            total=len(joint_3d_gt),
+            desc="evaluation",
+            unit="seq",
+            dynamic_ncols=True,
+        ):
             assert i in res, "missing image id in result file: {}".format(i)
             vis = np.ones_like(kpt_gt[:, 0])
             kpt_pred = res[i]
@@ -172,16 +180,21 @@ class HPEEvaluator:
             eval_util_ab.feed(kpt_gt, vis, kpt_pred)
             eval_util_rr.feed(kpt_gt - kpt_gt[0], vis, kpt_pred - kpt_pred[0])
             eval_util_pa.feed(kpt_gt, vis, align_w_scale(kpt_gt, kpt_pred))
-
+        print("eval_absolute begin")
         mean_ab, _, auc_ab, pck_ab, thresh_ab = eval_util_ab.get_measures(
             _AUC_VAL_MIN, _AUC_VAL_MAX, _AUC_STEPS
         )
+        print("done")
+        print("eval_root_relative begin")
         mean_rr, _, auc_rr, pck_rr, thresh_rr = eval_util_rr.get_measures(
             _AUC_VAL_MIN, _AUC_VAL_MAX, _AUC_STEPS
         )
+        print("done")
+        print("eval_procrustes begin")
         mean_pa, _, auc_pa, pck_pa, thresh_pa = eval_util_pa.get_measures(
             _AUC_VAL_MIN, _AUC_VAL_MAX, _AUC_STEPS
         )
+        print("done")
 
         tabular_data = [
             ["absolute", mean_ab, auc_ab],

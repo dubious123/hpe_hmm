@@ -3,3 +3,7 @@ PyYAML
 open3d
 scipy
 scikit-image
+numpy
+matplotlib
+hmmlearn
+tqdm

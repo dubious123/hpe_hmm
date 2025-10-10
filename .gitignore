@@ -72,6 +72,7 @@ __pycache__/
 .env/
 .venv/
 .conda/
+env\ 
 
 # 로그
 *.log
